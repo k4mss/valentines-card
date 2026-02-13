@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valentine's Surprise</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #ffebee;
+            font-family: 'Segoe UI', sans-serif;
+            overflow: hidden; /* Prevents scrollbars when button moves */
+        }
+
+        /* Floating Hearts */
+        .heart {
+            position: absolute;
+            color: rgba(255, 77, 109, 0.3);
+            font-size: 20px;
+            user-select: none;
+            animation: move linear infinite;
+            z-index: 0;
+        }
+
+        @keyframes move {
+            from { transform: translateY(105vh) rotate(0deg); }
+            to { transform: translateY(-10vh) rotate(360deg); }
+        }
+
+        #card {
+            background-color: white;
+            padding: 50px;
+            border-radius: 25px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            text-align: center;
+            border: 2px solid #ff4d6d;
+            z-index: 10;
+            width: 350px;
+        }
+
+        h1 { color: #ff4d6d; margin-bottom: 30px; }
+
+        .btn-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 50px; /* Clear separation */
+            height: 60px;
+        }
+
+        button {
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 12px;
+            border: none;
+            transition: background 0.3s;
+        }
+
+        #yesBtn {
+            background-color: #ff4d6d;
+            color: white;
+        }
+
+        #noBtn {
+            background-color: #adb5bd;
+            color: white;
+            /* Added transition for smooth jumping */
+            transition: all 0.1s ease; 
+            z-index: 999;
+        }
+
+        /* Message Box */
+        #successBox {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 60px;
+            border-radius: 30px;
+            box-shadow: 0 0 100px rgba(255, 77, 109, 0.4);
+            text-align: center;
+            z-index: 1000;
+            border: 8px solid #ff4d6d;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="card">
+        <h1>Aliyah Mae Beltran Will you be my Valentine?</h1>
+        <div class="btn-container">
+            <button id="yesBtn">YES</button>
+            <button id="noBtn">NO</button>
+        </div>
+    </div>
+
+    <div id="successBox">
+        <h1 style="font-size: 5rem; margin: 0;">❤️</h1>
+        <h2 style="color: #ff4d6d; font-size: 2rem;">Yeheeeeeyyyyyyyyy Sabi ko na nga ba Papayag ka Thank youuu soo muchhhhh!</h2>
+    </div>
+
+    <script>
+        // Create Floating Hearts
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = (Math.random() * 3 + 2) + 's';
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 5000);
+        }
+        setInterval(createHeart, 300);
+
+        const noBtn = document.getElementById('noBtn');
+        const yesBtn = document.getElementById('yesBtn');
+        const card = document.getElementById('card');
+        const successBox = document.getElementById('successBox');
+
+        // Function to move button anywhere on screen
+        function moveButton() {
+            // Set to absolute so it can leave the card
+            noBtn.style.position = 'fixed';
+            
+            // Calculate random position within full window width/height
+            const maxX = window.innerWidth - noBtn.offsetWidth;
+            const maxY = window.innerHeight - noBtn.offsetHeight;
+            
+            const randomX = Math.floor(Math.random() * maxX);
+            const randomY = Math.floor(Math.random() * maxY);
+            
+            noBtn.style.left = randomX + 'px';
+            noBtn.style.top = randomY + 'px';
+        }
+
+        // Teleport on hover (standard)
+        noBtn.addEventListener('mouseover', moveButton);
+
+        // Teleport on click (if they are fast enough to click it)
+        noBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            moveButton();
+        });
+
+        // Show final message
+        yesBtn.addEventListener('click', () => {
+            card.style.display = 'none';
+            noBtn.style.display = 'none';
+            successBox.style.display = 'block';
+        });
+    </script>
+</body>
+</html>
